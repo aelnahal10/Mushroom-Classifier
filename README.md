@@ -1,0 +1,2 @@
+# Mushroom-Classifier
+A web app made using Python Streamlit Library, Evaluates three different machine learning models according to their confusion matrix, ROC curve, Precision Recall curve, accuracy, precision , and recall
