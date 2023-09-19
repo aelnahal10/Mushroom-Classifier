@@ -1,10 +1,11 @@
 from googleapiclient.discovery import build
 
 # Initialize the YouTube API client
-api_key = 'YOUR_API_KEY'
+api_key = 'Your_API_Key'
 youtube = build('youtube', 'v3', developerKey=api_key)
 
-# Perform a search
+
+# pylint: disable=no-member
 request = youtube.search().list(
     part='snippet',
     maxResults=25,
