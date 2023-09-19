@@ -1,7 +1,6 @@
 from googleapiclient.discovery import build
 
-# Initialize the YouTube API client
-api_key = 'Your_API_Key'
+api_key = 'AIzaSyCd5vTBY66sbDamoFC_ZcxfjKVG0bqQqOw'
 youtube = build('youtube', 'v3', developerKey=api_key)
 
 
@@ -14,11 +13,7 @@ request = youtube.search().list(
 )
 
 response = request.execute()
-
-# Create a list to store video URLs and names
 video_list = []
-
-# Loop through the search results and populate the list
 for item in response['items']:
     video_id = item['id']['videoId']
     video_name = item['snippet']['title']
@@ -29,6 +24,5 @@ for item in response['items']:
         'url': video_url
     })
 
-# Print the list of video URLs and names
 for video in video_list:
     print(f"Name: {video['name']}, URL: {video['url']}")
