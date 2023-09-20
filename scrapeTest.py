@@ -8,7 +8,7 @@ request = youtube.search().list(
     part='snippet',
     maxResults=25,
     type='video',
-    q='shorts AND (redpill|hustle|masculinity|goggins)',  # Query for Shorts with specific keywords
+    q='shorts AND (redpill|success|masculinity|goggins)',  # Query for Shorts with specific keywords
     order='viewCount',  # Sorting by view count
     relevanceLanguage='en'  # Looking for videos in English
 )
@@ -20,12 +20,16 @@ video_list = []
 for item in response['items']:
     video_id = item['id']['videoId']
     video_name = item['snippet']['title']
+    video_description = item['snippet']['description']
     video_url = f'https://www.youtube.com/watch?v={video_id}'
     
     video_list.append({
         'name': video_name,
+        'description': video_description,
         'url': video_url
     })
 
 for video in video_list:
-    print(f"Name: {video['name']}, URL: {video['url']}")
+    print(f"Name: {video['name']}, Description: {video['description']}, URL: {video['url']}")
+
+
