@@ -1,8 +1,13 @@
+import pytube
 from googleapiclient.discovery import build
 from pytube import YouTube
+import os
+from dotenv import load_dotenv
 
-# Setup for scraping
-api_key = 'AIzaSyCd5vTBY66sbDamoFC_ZcxfjKVG0bqQqOw'  # Replace with your API key
+
+load_dotenv()
+api_key = os.getenv('YOUTUBE_API_KEY')
+
 youtube = build('youtube', 'v3', developerKey=api_key)
 
 # pylint: disable=no-member
@@ -33,20 +38,43 @@ def fetch_video_links():
 
     return video_list
 
+
+
+def sanitize_filename(filename):
+    invalid_chars = ['<', '>', ':', '"', '/', '\\', '|', '?', '*']
+    for char in invalid_chars:
+        filename = filename.replace(char, '')
+    return filename
+
+
 def download_video(video_url, video_name):
+    # Sanitize and add .mp4 extension to the video name
+    video_name = sanitize_filename(video_name) + ".mp4"
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    save_folder = os.path.join(script_dir, "downloaded_videos")
+    if not os.path.exists(save_folder):
+        os.makedirs(save_folder)
+
     yt = YouTube(video_url)
     video_stream = yt.streams.get_highest_resolution()
-    video_path = f"./{video_name}.mp4"  # Save with video name as filename
-    print(f"Downloading {yt.title}...")
-    video_stream.download(output_path=video_path)
-    print(f"{yt.title} Download complete!")
+
+    # Save the video to the defined folder
+    video_stream.download(output_path=save_folder, filename=video_name)
+
 
 def main():
-    video_list = fetch_video_links()
-    
+    video_list = fetch_video_links()  # Assuming you've already defined this function
+
     for video in video_list:
-        print(f"Name: {video['name']}, Description: {video['description']}, URL: {video['url']}")
-        download_video(video['url'], video['name'])
+        print(f"Name: {video['name']}, URL: {video['url']}")
+        try:
+            download_video(video['url'], video['name'])
+            print(f"Downloaded: {video['name']}")
+        except pytube.exceptions.AgeRestrictedError:
+            print(f"Skipped {video['name']} due to age restriction.")
+        except Exception as e:
+            print(f"Error downloading {video['name']}: {e}")
+
 
 if __name__ == "__main__":
     main()
