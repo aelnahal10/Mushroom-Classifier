@@ -63,7 +63,6 @@ def main():
     video_list = fetch_video_links()
 
     for video in video_list:
-        print(f"Name: {video['name']}, URL: {video['url']}")
         try:
             download_video(video['url'], video['name'])
             print(f"Downloaded: {video['name']}")
