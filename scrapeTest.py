@@ -48,7 +48,6 @@ def sanitize_filename(filename):
 
 
 def download_video(video_url, video_name):
-    # Sanitize and add .mp4 extension to the video name
     video_name = sanitize_filename(video_name) + ".mp4"
     script_dir = os.path.dirname(os.path.abspath(__file__))
     save_folder = os.path.join(script_dir, "downloaded_videos")
@@ -57,13 +56,11 @@ def download_video(video_url, video_name):
 
     yt = YouTube(video_url)
     video_stream = yt.streams.get_highest_resolution()
-
-    # Save the video to the defined folder
     video_stream.download(output_path=save_folder, filename=video_name)
 
 
 def main():
-    video_list = fetch_video_links()  # Assuming you've already defined this function
+    video_list = fetch_video_links()
 
     for video in video_list:
         print(f"Name: {video['name']}, URL: {video['url']}")
