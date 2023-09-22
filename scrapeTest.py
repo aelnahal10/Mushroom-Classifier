@@ -1,7 +1,7 @@
+import os
 import pytube
 from googleapiclient.discovery import build
 from pytube import YouTube
-import os
 from dotenv import load_dotenv
 
 
@@ -16,9 +16,8 @@ def fetch_video_links():
         part='snippet',
         maxResults=25,
         type='video',
-        q='shorts AND (redpill|masculinity|goggins|stay hard)',
+        q='shorts AND (David Goggins|masculinity|goggins|stay hard)',
         order='viewCount',
-        relevanceLanguage='en'
     )
 
     response = request.execute()
@@ -29,7 +28,6 @@ def fetch_video_links():
         video_name = item['snippet']['title']
         video_description = item['snippet']['description']
         video_url = f'https://www.youtube.com/watch?v={video_id}'
-        
         video_list.append({
             'name': video_name,
             'description': video_description,
@@ -68,8 +66,8 @@ def main():
             print(f"Downloaded: {video['name']}")
         except pytube.exceptions.AgeRestrictedError:
             print(f"Skipped {video['name']} due to age restriction.")
-        except Exception as e:
-            print(f"Error downloading {video['name']}: {e}")
+        except Exception as error:
+            print(f"Error downloading {video['name']}: {error}")
 
 
 if __name__ == "__main__":
